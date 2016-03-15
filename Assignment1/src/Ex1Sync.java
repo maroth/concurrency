@@ -9,7 +9,7 @@ public class Ex1NoSync {
 
     volatile static int counter = 0;
 
-    private static synchronized void changeCounter(int value) {
+    private static void changeCounter(int value) {
         counter += value;
     }
 
