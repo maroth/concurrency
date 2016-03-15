@@ -5,7 +5,7 @@ package Ex1;
  */
 public class Benchmark {
     public static void main(String[] args) {
-        int i = 100000000;
+        int i = 1000000;
         System.out.println(runTest(1, 1, i));
         System.out.println(runTest(2, 2, i));
         System.out.println(runTest(4, 4, i));
