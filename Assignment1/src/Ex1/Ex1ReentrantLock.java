@@ -4,7 +4,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Ex1ReentrantLock extends Ex1 {
 
-    private static ReentrantLock lock = new ReentrantLock();
+    private static final ReentrantLock lock = new ReentrantLock();
 
     protected void changeCounter(Integer value) {
         lock.lock();

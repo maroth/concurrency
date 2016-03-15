@@ -3,17 +3,16 @@ package Ex1;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
 
 /**
  * Created by markusroth on 15/03/16.
  */
-public abstract class Ex1 {
+abstract class Ex1 {
 
     protected abstract void changeCounter(Integer value);
 
-    volatile protected static int counter = 0;
+    volatile static int counter = 0;
 
     public int run(Integer m, Integer n, Integer i) {
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -29,8 +28,8 @@ public abstract class Ex1 {
         IntStream.rangeClosed(1, iterations).forEach((index) -> action.run());
     }
 
-    Runnable increment = () -> changeCounter(1);
-    Runnable decrement = () -> changeCounter(-1);
+    private final Runnable increment = () -> changeCounter(1);
+    private final Runnable decrement = () -> changeCounter(-1);
 
     private static void startThread(ExecutorService executorService, Integer iterations, Runnable action) {
         executorService.execute(() -> repeater(iterations, action));

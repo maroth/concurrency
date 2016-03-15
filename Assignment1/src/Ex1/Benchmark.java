@@ -16,10 +16,9 @@ public class Benchmark {
         long reference = runTest(m, n, i, new Ex1NoSync());
         float sync = normalizeTime(reference, runTest(m, n, i, new Ex1Sync()));
         float reentrantLock = normalizeTime(reference, runTest(m, n, i, new Ex1ReentrantLock()));
-        String result = String.format(
+        return String.format(
                 "m: %d, n: %d, i: %d --> NoSync: 1 / Sync: %,6f / ReentrantLock: %,6f",
                 m, n, i, sync, reentrantLock);
-        return result;
     }
 
     private static float normalizeTime(long reference, long value) {
@@ -34,7 +33,6 @@ public class Benchmark {
         Long begin = System.nanoTime();
         runnable.run();
         Long end = System.nanoTime();
-        Long duration = end - begin;
-        return duration;
+        return end - begin;
     }
 }
