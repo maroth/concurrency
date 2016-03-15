@@ -1,11 +1,18 @@
 package Ex1;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 /**
  * Created by markusroth on 15/03/16.
  */
 public class Benchmark {
     public static void main(String[] args) {
         int i = 1000000;
+        String cpuInfo;
+        cpuInfo = executeCommand("sysctl -n machdep.cpu.brand_string ");
+        System.out.println(cpuInfo);
         System.out.println(runTest(1, 1, i));
         System.out.println(runTest(2, 2, i));
         System.out.println(runTest(4, 4, i));
@@ -34,5 +41,31 @@ public class Benchmark {
         runnable.run();
         Long end = System.nanoTime();
         return end - begin;
+    }
+
+
+    //from: http://www.mkyong.com/java/how-to-execute-shell-command-from-java/
+    private static String executeCommand(String command) {
+
+        StringBuffer output = new StringBuffer();
+
+        Process p;
+        try {
+            p = Runtime.getRuntime().exec(command);
+            p.waitFor();
+            BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+            String line = "";
+            while ((line = reader.readLine())!= null) {
+                output.append(line + "\n");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return output.toString();
+
     }
 }
