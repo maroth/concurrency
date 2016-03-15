@@ -1,18 +1,14 @@
 package Ex1;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
- * Created by markusroth on 15/03/16.
- */
 public class Benchmark {
     public static void main(String[] args) {
+        System.out.println(executeCommand("sw_vers"));
+        System.out.println(executeCommand("sysctl -n machdep.cpu.brand_string "));
+
         int i = 1000000;
-        String cpuInfo;
-        cpuInfo = executeCommand("sysctl -n machdep.cpu.brand_string ");
-        System.out.println(cpuInfo);
         System.out.println(runTest(1, 1, i));
         System.out.println(runTest(2, 2, i));
         System.out.println(runTest(4, 4, i));
@@ -20,12 +16,20 @@ public class Benchmark {
     }
 
     private static String runTest(int m, int n, int i) {
-        long reference = runTest(m, n, i, new Ex1NoSync());
-        float sync = normalizeTime(reference, runTest(m, n, i, new Ex1Sync()));
-        float reentrantLock = normalizeTime(reference, runTest(m, n, i, new Ex1ReentrantLock()));
+        long noSyncTime = runTest(m, n, i, new Ex1NoSync());
+        long syncTime = runTest(m, n, i, new Ex1Sync());
+        long reentrantLockTime = runTest(m, n, i, new Ex1ReentrantLock());
+
         return String.format(
-                "m: %d, n: %d, i: %d --> NoSync: 1 / Sync: %,6f / ReentrantLock: %,6f",
-                m, n, i, sync, reentrantLock);
+                "m: %d, n: %d, i: %d --> NoSync: %dms (1) / Sync: %dms (%,3f) / ReentrantLock: %dms (%,3f)",
+                m, n, i,
+                nanosToMillis(noSyncTime),
+                nanosToMillis(syncTime), normalizeTime(noSyncTime, syncTime),
+                nanosToMillis(reentrantLockTime), normalizeTime(noSyncTime, reentrantLockTime));
+    }
+
+    private static long nanosToMillis(long nanos) {
+        return nanos / 1000000;
     }
 
     private static float normalizeTime(long reference, long value) {

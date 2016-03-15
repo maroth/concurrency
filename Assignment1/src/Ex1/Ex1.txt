@@ -1,0 +1,12 @@
+To run the benchmark, run main in the Benchmark class. Output on my machine:
+
+ProductName:	Mac OS X
+ProductVersion:	10.9.5
+BuildVersion:	13F1603
+
+Intel(R) Core(TM) i7-4750HQ CPU @ 2.00GHz
+
+m: 1, n: 1, i: 1000000 --> NoSync: 71ms (1) / Sync: 105ms (1.472157) / ReentrantLock: 194ms (2.727696)
+m: 2, n: 2, i: 1000000 --> NoSync: 106ms (1) / Sync: 232ms (2.186229) / ReentrantLock: 226ms (2.131484)
+m: 4, n: 4, i: 1000000 --> NoSync: 198ms (1) / Sync: 476ms (2.405722) / ReentrantLock: 497ms (2.513592)
+m: 8, n: 8, i: 1000000 --> NoSync: 384ms (1) / Sync: 995ms (2.585603) / ReentrantLock: 987ms (2.565832)

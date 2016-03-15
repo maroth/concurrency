@@ -5,9 +5,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
-/**
- * Created by markusroth on 15/03/16.
- */
 abstract class Ex1 {
 
     protected abstract void changeCounter(Integer value);
