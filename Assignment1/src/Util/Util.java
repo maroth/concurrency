@@ -2,7 +2,6 @@ package Util;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
 public class Util {
@@ -11,7 +10,9 @@ public class Util {
         IntStream.rangeClosed(1, iterations).forEach((index) -> action.run());
     }
 
-    public static BiFunction<String[], Integer, Integer> parseParam = (array, index) -> Integer.parseInt(array[index]);
+    public static int parseParam(String[] array, int index) {
+        return Integer.parseInt(array[index]);
+    }
 
     public static void waitForThreads(ExecutorService executorService) {
         try {
@@ -22,9 +23,7 @@ public class Util {
         }
     }
 
-    public static void startThread(ExecutorService executorService, Integer iterations, Runnable action) {
-        executorService.execute(() -> repeater(iterations, action));
+    public static void startMultipleThreads(ExecutorService executorService, Integer multiple, Runnable thread) {
+        executorService.execute(() -> repeater(multiple, thread));
     }
-
-
 }

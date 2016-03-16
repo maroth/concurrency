@@ -1,4 +1,17 @@
-To run the benchmark, run main in the Benchmark class. Output on my machine:
+To run the benchmark, run main in the Ex1 class. It takes the number of increment threads, the number of  decrement
+threads and the number of iterations as paramters. It outputs the system specs and the test results for the passed
+arguments.
+
+The test run with 100000 iterations gave strange results. It seems that with 8 threads, using the reentrant lock
+is faster than using no synchronization at all. Also with one thread, using a Lock is faster than using no
+synchronization at all. I suspect this is some fluke on my system, so I re-ran the test with 100 times more iterations
+and got reasonable results that match my expectations.
+
+I am not sure what fluke this might be. Maybe the JIT takes some time for the first iteration? Maybe Garbage collection
+is the issue? Maybe threads get a higher priority after a while of heavy load?
+
+
+Output:
 
 ProductName:	Mac OS X
 ProductVersion:	10.9.5
@@ -6,7 +19,43 @@ BuildVersion:	13F1603
 
 Intel(R) Core(TM) i7-4750HQ CPU @ 2.00GHz
 
-m: 1, n: 1, i: 1000000 --> NoSync: 71ms (1) / Sync: 105ms (1.472157) / ReentrantLock: 194ms (2.727696)
-m: 2, n: 2, i: 1000000 --> NoSync: 106ms (1) / Sync: 232ms (2.186229) / ReentrantLock: 226ms (2.131484)
-m: 4, n: 4, i: 1000000 --> NoSync: 198ms (1) / Sync: 476ms (2.405722) / ReentrantLock: 497ms (2.513592)
-m: 8, n: 8, i: 1000000 --> NoSync: 384ms (1) / Sync: 995ms (2.585603) / ReentrantLock: 987ms (2.565832)
+Test run with m: 1, n: 1, i: 100000
+No Synchronization:             26ms (1)            with counter result 1324
+Lock:                           15ms (0.601457)     with counter result 0
+Reentrant Lock:                 40ms (1.511719)     with counter result 0
+
+Test run with m: 2, n: 2, i: 100000
+No Synchronization:             23ms (1)            with counter result 7464
+Lock:                           34ms (1.487650)     with counter result 0
+Reentrant Lock:                 30ms (1.315087)     with counter result 0
+
+Test run with m: 4, n: 4, i: 100000
+No Synchronization:             50ms (1)            with counter result -21750
+Lock:                           53ms (1.061136)     with counter result 0
+Reentrant Lock:                 56ms (1.111147)     with counter result 0
+
+Test run with m: 8, n: 8, i: 100000
+No Synchronization:            180ms (1)            with counter result 29549
+Lock:                          116ms (0.646280)     with counter result 0
+Reentrant Lock:                 97ms (0.537821)     with counter result 0
+
+
+Test run with m: 1, n: 1, i: 10000000
+No Synchronization:            470ms (1)            with counter result 2093131
+Lock:                         1416ms (3.010951)     with counter result 0
+Reentrant Lock:               2010ms (4.273163)     with counter result 0
+
+Test run with m: 2, n: 2, i: 10000000
+No Synchronization:           1105ms (1)            with counter result 77610
+Lock:                         3073ms (2.780757)     with counter result 0
+Reentrant Lock:               2344ms (2.121125)     with counter result 0
+
+Test run with m: 4, n: 4, i: 10000000
+No Synchronization:           2033ms (1)            with counter result -475594
+Lock:                         6270ms (3.084296)     with counter result 0
+Reentrant Lock:               4677ms (2.300916)     with counter result 0
+
+Test run with m: 8, n: 8, i: 10000000
+No Synchronization:           3592ms (1)            with counter result 335365
+Lock:                        10106ms (2.813225)     with counter result 0
+Reentrant Lock:               9027ms (2.512973)     with counter result 0
