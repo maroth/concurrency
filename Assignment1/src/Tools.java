@@ -10,6 +10,5 @@ import java.util.stream.IntStream;
 public class Tools {
 
 
-    BiFunction<String[], Integer, Integer> parseParam = (array, index) -> Integer.parseInt(array[index]);
 
 }
