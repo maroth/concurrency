@@ -11,14 +11,12 @@ import java.util.stream.IntStream;
 
 abstract class Ex1 {
 
-    private int counterLimit;
-    private int numberOfThreads;
-    private PetersonLock petersonLock;
+    protected int counterLimit;
+    protected int numberOfThreads;
+    PetersonLock petersonLock;
 
     protected abstract int getSharedCounter();
     protected abstract int[] getSharedCounterAccess();
-    protected abstract void setSharedCounter(int value);
-    protected abstract void setSharedCounterAccess(int value, int index);
 
     public static void main(String[] args) {
         if (args.length != 4) {
@@ -27,6 +25,7 @@ abstract class Ex1 {
                     "[single_processor|multiple_processors] [volatile|nonvolatile]");
             System.exit(1);
         }
+        System.out.println("\nPETERSON LOCKED SHARED COUNTER TEST");
         int numberOfThreads = Util.parseParam(args, 0);
         int counterLimit = Util.parseParam(args, 1);
         boolean singleProcessor = args[2].equals("single_processor");
@@ -39,8 +38,8 @@ abstract class Ex1 {
 
         if (singleProcessor) {
             try {
-                int cpu = Util.setSolarisAffinity();
-                System.out.printf("Using single processor: %d", cpu);
+                Util.setSolarisAffinity();
+                System.out.println("Using single processor");
             } catch (Exception ex) {
             }
         } else {
@@ -55,7 +54,6 @@ abstract class Ex1 {
             ex1 = new Ex1NonVolatile(numberOfThreads, counterLimit);
         }
 
-        System.out.print("Running test...");
         ex1.run();
     }
 
@@ -78,7 +76,6 @@ abstract class Ex1 {
                 Arrays.stream(this.getSharedCounterAccess())
                 .boxed()
                 .collect(Collectors.toList());
-        System.out.println();
         System.out.println("number of threads: " + this.numberOfThreads);
         System.out.println("duration in ms: " + Util.nanosToMillis(duration));
         System.out.println("Final counter value: " + this.getSharedCounter());
@@ -86,26 +83,5 @@ abstract class Ex1 {
         System.out.println("Biggest access count: " + Collections.max(sharedCounterAccessList));
     }
 
-    private void lockedIncrement(int threadNumber) {
-        while (!counterLimitReached()) {
-            this.petersonLock.lock(threadNumber);
-            if (!counterLimitReached()) {
-                int sharedCounter = this.getSharedCounter();
-                sharedCounter += 1;
-                this.setSharedCounter(sharedCounter);
-
-                int accessCount = this.getSharedCounterAccess()[threadNumber];
-                accessCount += 1;
-                this.setSharedCounterAccess(accessCount, threadNumber);
-                if (accessCount % (this.counterLimit / 50) == 0) {
-                    System.out.print(".");
-                }
-            }
-            this.petersonLock.unlock(threadNumber);
-        }
-    }
-
-    private boolean counterLimitReached() {
-        return this.getSharedCounter() >= counterLimit;
-    }
+    protected abstract void lockedIncrement(int threadNumber);
 }
