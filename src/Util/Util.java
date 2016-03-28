@@ -26,4 +26,15 @@ public class Util {
     public static void startMultipleThreads(ExecutorService executorService, Integer multiple, Runnable thread) {
         executorService.execute(() -> repeater(multiple, thread));
     }
+
+    public static long measureTime(Runnable runnable) {
+        Long begin = System.nanoTime();
+        runnable.run();
+        Long end = System.nanoTime();
+        return end - begin;
+    }
+
+    public static long nanosToMillis(long nanos) {
+        return nanos / 1000000;
+    }
 }

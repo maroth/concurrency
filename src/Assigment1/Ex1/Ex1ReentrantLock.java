@@ -1,4 +1,4 @@
-package Ex1;
+package Assigment1.Ex1;
 
 import java.util.concurrent.locks.ReentrantLock;
 

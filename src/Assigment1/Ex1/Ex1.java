@@ -1,4 +1,4 @@
-package Ex1;
+package Assigment1.Ex1;
 
 import Util.Util;
 
@@ -25,8 +25,8 @@ abstract class Ex1 {
         int m = Util.parseParam(args, 1);
         int i = Util.parseParam(args, 2);
 
-        System.out.println(executeCommand("sw_vers"));
-        System.out.println(executeCommand("sysctl -n machdep.cpu.brand_string"));
+        //System.out.println(executeCommand("sw_vers"));
+        //System.out.println(executeCommand("sysctl -n machdep.cpu.brand_string"));
 
         TestResult noSyncResult = runTest(m, n, i, new Ex1NoSync());
         TestResult syncResult = runTest(m, n, i, new Ex1Sync());
@@ -38,17 +38,17 @@ abstract class Ex1 {
 
         System.out.println(String.format(
                 "No Synchronization: %dms (1) with counter result %d",
-                nanosToMillis(noSyncResult.duration), noSyncResult.endCounter));
+                Util.nanosToMillis(noSyncResult.duration), noSyncResult.endCounter));
 
         System.out.println(String.format(
                 "Lock: %dms (%,3f) with counter result %d",
-                nanosToMillis(syncResult.duration),
+                Util.nanosToMillis(syncResult.duration),
                 normalizeTime(noSyncResult.duration, syncResult.duration),
                 syncResult.endCounter));
 
         System.out.println(String.format(
                 "Reentrant Lock: %dms (%,3f) with counter result %d",
-                nanosToMillis(reentrantLockResult.duration),
+                Util.nanosToMillis(reentrantLockResult.duration),
                 normalizeTime(noSyncResult.duration, reentrantLockResult.duration),
                 reentrantLockResult.endCounter));
     }
@@ -56,17 +56,13 @@ abstract class Ex1 {
     private final Runnable increment = () -> changeCounter(1);
     private final Runnable decrement = () -> changeCounter(-1);
 
-    private static long nanosToMillis(long nanos) {
-        return nanos / 1000000;
-    }
-
     private static float normalizeTime(long reference, long value) {
         return (float) value / (float) reference;
     }
 
     private static TestResult runTest(int m, int n, int i, Ex1 ex1) {
         TestResult result = new TestResult();
-        result.duration = measureTime(() -> result.endCounter = ex1.run(m, n, i));
+        result.duration = Util.measureTime(() -> result.endCounter = ex1.run(m, n, i));
         return result;
     }
 
@@ -78,13 +74,6 @@ abstract class Ex1 {
         Util.waitForThreads(executorService);
 
         return counter;
-    }
-
-    private static long measureTime(Runnable runnable) {
-        Long begin = System.nanoTime();
-        runnable.run();
-        Long end = System.nanoTime();
-        return end - begin;
     }
 
     //from: http://www.mkyong.com/java/how-to-execute-shell-command-from-java/

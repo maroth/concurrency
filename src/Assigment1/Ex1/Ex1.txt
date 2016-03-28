@@ -1,4 +1,4 @@
-To run the benchmark, run main in the Ex1 class. It takes the number of increment threads, the number of  decrement
+To run the benchmark, run main in the Assigment1.Ex1 class. It takes the number of increment threads, the number of  decrement
 threads and the number of iterations as paramters. It outputs the system specs and the test results for the passed
 arguments.
 
