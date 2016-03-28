@@ -37,4 +37,26 @@ public class Util {
     public static long nanosToMillis(long nanos) {
         return nanos / 1000000;
     }
+
+    public static int setSolarisAffinity() throws Exception {
+        int processor;
+        try {
+            // retrieve process id
+            String pid_name = java.lang.management.ManagementFactory.getRuntimeMXBean().getName();
+            String [] pid_array = pid_name.split("@");
+            int pid = Integer.parseInt( pid_array[0] );
+
+            // random processor
+            processor = new java.util.Random().nextInt( 32 );
+
+            // Set process affinity to one processor (on Solaris)
+            Process p = Runtime.getRuntime().exec("/usr/sbin/pbind -b " + processor + " " + pid);
+            p.waitFor();
+        }
+        catch (Exception err) {
+            System.out.println("Unable to bind to single processor (are you on Solaris?)");
+            throw(err);
+        }
+        return processor;
+    }
 }

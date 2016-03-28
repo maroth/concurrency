@@ -1,4 +1,4 @@
-package Assignment2;
+package Assignment2.Ex1;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
