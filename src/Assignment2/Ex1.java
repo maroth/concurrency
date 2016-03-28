@@ -46,13 +46,11 @@ class Ex1 {
     }
 
     private void lockedIncrement(int threadNumber) {
-        while (true) {
+        while (!counterLimitReached()) {
             this.petersonLock.lock(threadNumber);
             if (!counterLimitReached()) {
                 this.sharedCounter += 1;
                 this.sharedCounterAccess[threadNumber] += 1;
-            } else {
-                break;
             }
             this.petersonLock.unlock(threadNumber);
         }

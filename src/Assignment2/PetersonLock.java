@@ -1,6 +1,5 @@
 package Assignment2;
 
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PetersonLock {
@@ -13,27 +12,35 @@ public class PetersonLock {
         this.level = new AtomicInteger[numberOfThreads];
         this.victim = new AtomicInteger[numberOfThreads];
 
-        Arrays.fill(this.level, new AtomicInteger(-1));
-        Arrays.fill(this.victim, new AtomicInteger(-1));
+        for (int i = 0; i < numberOfThreads; i++) {
+            this.level[i] = new AtomicInteger(-1);
+            this.victim[i] = new AtomicInteger(-1);
+        }
+    }
+
+    private void printStatus() {
+        for (int i = 0; i < numberOfThreads; i++) {
+            System.out.println("Level[" + i + "]: " + level[i]);
+            System.out.println("Victim[" + i + "]: " + victim[i]);
+        }
     }
 
     public void lock(int threadNumber) {
-        for (int currentLevel = 1; currentLevel < threadNumber; currentLevel++) {
+        for (int currentLevel = 1; currentLevel < numberOfThreads; currentLevel++) {
             this.level[threadNumber].set(currentLevel);
             this.victim[currentLevel].set(threadNumber);
-            while(threadWithHigherLevelExists(threadNumber, currentLevel)
+            while(threadWithHigherOrEqualLevelExists(threadNumber, currentLevel)
                     && threadIsVictimOnLevel(threadNumber, currentLevel)) {}
         }
-
     }
 
     private boolean threadIsVictimOnLevel(int threadNumber, int level) {
-        return this.victim[level].equals(threadNumber);
+        return this.victim[level].get() == threadNumber;
     }
 
-    private boolean threadWithHigherLevelExists(int threadNumber, int currentLevel) {
-        for (int index = 0; index < threadNumber; index++) {
-            if (this.level[index].get() > currentLevel && index != threadNumber) {
+    private boolean threadWithHigherOrEqualLevelExists(int threadNumber, int currentLevel) {
+        for (int index = 0; index < this.level.length; index++) {
+            if (this.level[index].get() >= currentLevel && index != threadNumber) {
                 return true;
             }
         }
