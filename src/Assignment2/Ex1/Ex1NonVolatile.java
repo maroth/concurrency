@@ -34,6 +34,6 @@ public class Ex1NonVolatile extends Ex1 {
 
     private void printStatus(int threadNumber) {
         float completed = ((float) this.sharedCounter) / super.counterLimit;
-        Util.Util.log("" + completed + " (" + threadNumber + ")");
+        Util.Util.debug("" + completed + " (" + threadNumber + ")");
     }
 }

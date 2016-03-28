@@ -62,8 +62,14 @@ public class Util {
         return processor;
     }
 
-    public static void log(String message) {
+    public static void debug(String message) {
         if (Ex1.debug) {
+            System.out.println(message);
+        }
+    }
+
+    public static void print(String message) {
+        if (!Ex1.table) {
             System.out.println(message);
         }
     }
