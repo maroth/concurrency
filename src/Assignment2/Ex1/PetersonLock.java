@@ -30,7 +30,9 @@ public class PetersonLock {
             this.level[threadNumber].set(currentLevel);
             this.victim[currentLevel].set(threadNumber);
             while(threadWithHigherOrEqualLevelExists(threadNumber, currentLevel)
-                    && threadIsVictimOnLevel(threadNumber, currentLevel)) {}
+                    && threadIsVictimOnLevel(threadNumber, currentLevel)) {
+               int a = 0;
+            }
         }
     }
 

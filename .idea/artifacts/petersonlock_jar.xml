@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="petersonlock:jar">
+    <output-path>$PROJECT_DIR$/output/artifacts/petersonlock_jar</output-path>
+    <root id="archive" name="petersonlock.jar">
+      <element id="module-output" name="concurrency" />
+    </root>
+  </artifact>
+</component>

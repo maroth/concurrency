@@ -25,11 +25,19 @@ abstract class Ex1 {
             System.out.println(
                     "Usage: Ex1 number_of_threads counter_limit " +
                     "[single_processor|multiple_processors] [volatile|nonvolatile]");
+            System.exit(1);
         }
         int numberOfThreads = Util.parseParam(args, 0);
         int counterLimit = Util.parseParam(args, 1);
+        boolean singleProcessor = args[2].equals("single_processor");
+        boolean isVolatile = args[3].equals("volatile");
+        runTest(numberOfThreads, counterLimit, singleProcessor, isVolatile);
+    }
+
+    public static void runTest(int numberOfThreads, int counterLimit, boolean singleProcessor, boolean isVolatile) {
         Ex1 ex1;
-        if (args[2].equals("single_processor")) {
+
+        if (singleProcessor) {
             try {
                 int cpu = Util.setSolarisAffinity();
                 System.out.printf("Using single processor: %d", cpu);
@@ -38,15 +46,17 @@ abstract class Ex1 {
         } else {
             System.out.println("Using multiple processors");
         }
-        if (args[3].equals("nonvolatile")) {
-            System.out.println("non-volatile shared counter");
-            ex1 = new Ex1NonVolatile(numberOfThreads, counterLimit);
-            ex1.run();
-        } else if (args[3].equals("volatile")){
+
+        if (isVolatile) {
             System.out.println("volatile shared counter");
             ex1 = new Ex1Volatile(numberOfThreads, counterLimit);
-            ex1.run();
+        } else {
+            System.out.println("non-volatile shared counter");
+            ex1 = new Ex1NonVolatile(numberOfThreads, counterLimit);
         }
+
+        System.out.print("Running test...");
+        ex1.run();
     }
 
     Ex1(int numberOfThreads, int counterLimit) {
@@ -68,6 +78,7 @@ abstract class Ex1 {
                 Arrays.stream(this.getSharedCounterAccess())
                 .boxed()
                 .collect(Collectors.toList());
+        System.out.println();
         System.out.println("number of threads: " + this.numberOfThreads);
         System.out.println("duration in ms: " + Util.nanosToMillis(duration));
         System.out.println("Final counter value: " + this.getSharedCounter());
@@ -86,6 +97,9 @@ abstract class Ex1 {
                 int accessCount = this.getSharedCounterAccess()[threadNumber];
                 accessCount += 1;
                 this.setSharedCounterAccess(accessCount, threadNumber);
+                if (accessCount % (this.counterLimit / 50) == 0) {
+                    System.out.print(".");
+                }
             }
             this.petersonLock.unlock(threadNumber);
         }
