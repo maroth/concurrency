@@ -1,5 +1,7 @@
 package Util;
 
+import Assignment2.Ex1.Ex1;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
@@ -59,4 +61,11 @@ public class Util {
         }
         return processor;
     }
+
+    public static void log(String message) {
+        if (Ex1.debug) {
+            System.out.println(message);
+        }
+    }
+
 }

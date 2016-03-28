@@ -2,6 +2,8 @@ package Assignment2.Ex1;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static Util.Util.log;
+
 public class PetersonLock {
     private int numberOfThreads;
     private AtomicInteger[] level;
@@ -23,17 +25,19 @@ public class PetersonLock {
             System.out.println("Level[" + i + "]: " + level[i]);
             System.out.println("Victim[" + i + "]: " + victim[i]);
         }
+        try { Thread.sleep(1000); } catch (InterruptedException e) {}
     }
 
     public void lock(int threadNumber) {
-        for (int currentLevel = 1; currentLevel < numberOfThreads; currentLevel++) {
+        for (int currentLevel = 1; currentLevel < this.numberOfThreads; currentLevel++) {
+            log("Thread " + threadNumber + " entering level " + currentLevel);
             this.level[threadNumber].set(currentLevel);
             this.victim[currentLevel].set(threadNumber);
             while(threadWithHigherOrEqualLevelExists(threadNumber, currentLevel)
                     && threadIsVictimOnLevel(threadNumber, currentLevel)) {
-               int a = 0;
             }
         }
+        log(" Thread " + threadNumber + " got lock");
     }
 
     private boolean threadIsVictimOnLevel(int threadNumber, int level) {
@@ -50,6 +54,7 @@ public class PetersonLock {
     }
 
     public void unlock(int threadNumber) {
+        log(" Thread " + threadNumber + " released lock");
         this.level[threadNumber] = new AtomicInteger(0);
     }
 }

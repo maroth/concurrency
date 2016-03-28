@@ -9,7 +9,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors; import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-abstract class Ex1 {
+public abstract class Ex1 {
+
+    public static boolean debug;
 
     protected int counterLimit;
     protected int numberOfThreads;
@@ -19,17 +21,18 @@ abstract class Ex1 {
     protected abstract int[] getSharedCounterAccess();
 
     public static void main(String[] args) {
-        if (args.length != 4) {
+        if (args.length != 3) {
             System.out.println(
                     "Usage: Ex1 number_of_threads counter_limit " +
-                    "[single_processor|multiple_processors] [volatile|nonvolatile]");
+                    "args where args == (s)single processor, (d)ebug, (v)olatile");
             System.exit(1);
         }
         System.out.println("\nPETERSON LOCKED SHARED COUNTER TEST");
         int numberOfThreads = Util.parseParam(args, 0);
         int counterLimit = Util.parseParam(args, 1);
-        boolean singleProcessor = args[2].equals("single_processor");
-        boolean isVolatile = args[3].equals("volatile");
+        Ex1.debug = args[2].contains("d");
+        boolean singleProcessor = args[2].contains("s");
+        boolean isVolatile = args[2].contains("v");
         runTest(numberOfThreads, counterLimit, singleProcessor, isVolatile);
     }
 

@@ -33,11 +33,7 @@ public class Ex1NonVolatile extends Ex1 {
     }
 
     private void printStatus(int threadNumber) {
-        if (this.counterLimit > 10000) {
-            if (this.sharedCounter % (super.counterLimit / 1000) == 0) {
-                float completed = ((float) this.sharedCounter) / super.counterLimit;
-                System.out.println("" + completed + " (" + threadNumber + ")");
-            }
-        }
+        float completed = ((float) this.sharedCounter) / super.counterLimit;
+        Util.Util.log("" + completed + " (" + threadNumber + ")");
     }
 }
