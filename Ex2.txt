@@ -1,0 +1,81 @@
+We have three threads: A, B and C. Threads B and C are waiting in level 1, and thread A is in level 2 and about
+to enter the critical section.
+
+Level[A] = 2
+Lebel[B] = 1
+Level[C] = 1
+
+Victim[1] = _
+Victim[2] = A
+
+Thread A enters the critical section, leaves it and thus switches to level 0:
+
+Level[A] = 0
+Lebel[B] = 1
+Level[C] = 1
+
+Victim[1] = _
+Victim[2] = A
+
+Thread A immediately wants to re-enter the critical section and moves to level 1:
+
+Level[A] = 1
+Lebel[B] = 1
+Level[C] = 1
+
+Victim[1] = A
+Victim[2] = A
+
+Now we have a race condition between the threads B and C. Both threads can move up to level two, but as soon as one
+does move up, the other thread will continue to wait in level one. The thread that does move up will get to the critical
+section, and then the race condition will repeat itself. For example let us assume without loss of generality that
+thread B gets to move up to level 2 first:
+
+Level[A] = 1
+Level[B] = 2
+Level[C] = 1
+
+Victim[1] = B
+Victim[2] = A
+
+Thread B enters the critical section and leaves it again:
+
+Level[A] = 1
+Lebel[B] = 0
+Level[C] = 1
+
+Victim[1] = B
+Victim[2] = _
+
+Thread B immediately wants to enter the critical section again:
+
+Level[A] = 1
+Lebel[B] = 1
+Level[C] = 1
+
+Victim[1] = B
+Victim[2] = _
+
+Now we have the same race condition between threads A and C. If A wins this race, it can result in the same race for
+B and C again. It is possible to get a loop where thread C is completely starved and will never reach the critical
+section.
+
+To solve this problem, we might use an array that remembers how long each thread has been waiting in its current level.
+We could then expand the Peterson lock algorithm to:
+
+lock() {
+    for (int L = 1; L < n; L++) {
+        level[i] = L;
+        victim[L] = i;
+        waiting[i] = 0;
+        while (( exists k != i with level[k] >= L ) &&
+        victim [L] == i &&
+        (exists k != i with level[k] == L && waiting[k] > waiting[i])) {
+            waiting[i] += 1;
+        };
+    }
+}
+
+unlock() {
+    level[i] = 0;
+}
