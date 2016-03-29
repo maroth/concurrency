@@ -1,0 +1,50 @@
+FIGURE 1
+========
+
+LINEARIZABLE
+
+This order can be described as a valid sequence of events:
+
+r.write(1)
+r.read(1)
+r.write(2)
+r.read(2)
+
+This is because write(1), write(2) and read(1) are overlapping in such a way that one can define that the operation
+that has effect on the state happens in the order above. This means that the events in figure 1 linearizable.
+
+
+SEQUENTIALLY CONSISTENT
+
+Since sequential consistency is weaker than linearizability, if figure 1 is linearizable then it also must be
+sequentially consistent.
+
+
+
+FIGURE 2
+========
+
+NOT LINEARIZABLE
+
+This order cannot be described as a valid sequence of events:
+
+r.write(1)
+r.write(2)
+r.read(2)
+r.read(1) <-- Impossible, as write(2) happened before read(2)
+
+It is not possible to order the operations in a way that is consistent. write(2) must have happened before read(2),
+and read(1) is strictly after read(2). This means write(2) happened before read(1), so it is impossible to read(1),
+one can only read(2) at that point. This means the events in figure 2 are not linearizable.
+
+
+SEQUENTIALLY CONSISTENT
+
+It is possible to re-order the steps to achieve a consistent sequential history:
+
+r.write(1)
+r.read(1)
+r.write(2)
+r.read(2)
+
+Therefore, the sequence from figure 2 is sequentially consistent.
