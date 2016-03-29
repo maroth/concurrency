@@ -1,1 +1,172 @@
+Run program with:
+
+java -jar petersonlock.jar threads counterLimit options
+
+where options can include:
+ v: use volatile for shared counter and access array
+ s: bind to single CPU (on Solaris only)
+ t: output result as csv table row
+ d: debug output
+
+So a test with 2 threads counting to 10000 bound to a single CPU with volatile counter will be:
+
+ java -jar petersonlock.jar 2 10000 sv
+
+
+
+SAMPLE PROGRAM OUTPUTS
+
+SINGLE PROCESSOR (count to 1000)
+
+PETERSON LOCKED SHARED COUNTER TEST
+Using single processor
+non-volatile shared counter
+number of threads: 1
+duration in ms: 296
+Final counter value: 1000
+Smallest access count: 1000
+Biggest access count: 1000
+
+PETERSON LOCKED SHARED COUNTER TEST
+Using single processor
+non-volatile shared counter
+number of threads: 4
+duration in ms: 348
+Final counter value: 1000
+Smallest access count: 0
+Biggest access count: 1000
+
+PETERSON LOCKED SHARED COUNTER TEST
+Using single processor
+non-volatile shared counter
+number of threads: 8
+duration in ms: 50780
+Final counter value: 1000
+Smallest access count: 70
+Biggest access count: 503
+
+PETERSON LOCKED SHARED COUNTER TEST
+Using single processor
+volatile shared counter
+number of threads: 1
+duration in ms: 298
+Final counter value: 1000
+Smallest access count: 1000
+Biggest access count: 1000
+
+PETERSON LOCKED SHARED COUNTER TEST
+Using single processor
+volatile shared counter
+number of threads: 4
+duration in ms: 348
+Final counter value: 1000
+Smallest access count: 0
+Biggest access count: 1000
+
+PETERSON LOCKED SHARED COUNTER TEST
+Using single processor
+volatile shared counter
+number of threads: 8
+duration in ms: 34050
+Final counter value: 1000
+Smallest access count: 40
+Biggest access count: 706
+
+MULTIPLE PROCESSORS (count to 300000)
+
+PETERSON LOCKED SHARED COUNTER TEST
+Using multiple processors
+non-volatile shared counter
+number of threads: 1
+duration in ms: 1689
+Final counter value: 300000
+Smallest access count: 300000
+Biggest access count: 300000
+
+PETERSON LOCKED SHARED COUNTER TEST
+Using multiple processors
+non-volatile shared counter
+number of threads: 4
+duration in ms: 1996
+Final counter value: 300000
+Smallest access count: 74944
+Biggest access count: 75049
+
+PETERSON LOCKED SHARED COUNTER TEST
+Using multiple processors
+non-volatile shared counter
+number of threads: 8
+duration in ms: 2160
+Final counter value: 300000
+Smallest access count: 37305
+Biggest access count: 37558
+
+PETERSON LOCKED SHARED COUNTER TEST
+Using multiple processors
+volatile shared counter
+number of threads: 1
+duration in ms: 1726
+Final counter value: 300000
+Smallest access count: 300000
+Biggest access count: 300000
+
+PETERSON LOCKED SHARED COUNTER TEST
+Using multiple processors
+volatile shared counter
+number of threads: 4
+duration in ms: 1851
+Final counter value: 300000
+Smallest access count: 74943
+Biggest access count: 75072
+
+PETERSON LOCKED SHARED COUNTER TEST
+Using multiple processors
+volatile shared counter
+number of threads: 8
+duration in ms: 2244
+Final counter value: 300000
+Smallest access count: 37412
+Biggest access count: 37546
+
+
+AVERAGE OF OTHER EXPERIMENTAL RUNS
+
+Test run with 100 executions each.
+Counting to 300000, with a correct end counter in all cases.
+The complete numbers including minimum and maximum counter values can be found in a2ex1_output_averages.csv
+
+BOUND TO SINGLE PROCESSOR
+
+		    Non-volatile	Volatile
+1 Thread	3279 ms			3406 ms
+4 Threads	Very long		Very long
+8 Threads	Very long		very long
+
+MULTIPLE PROCESSORS
+
+		    Non-Volatile	Volatile
+1 Thread	1693 ms			1712 ms
+4 Threads	2065 ms			2090 ms
+8 Threads	2623 ms			2627 ms
+
+
+INTERPRETATION
+
+Even with the same parameters, program execution time can vary quite a bit. It is not easy to figure out
+what is random jitter and what are real effects. For this reason I wrote a bash script to run the same test set
+100 times, wrote the output to a CSV and used LibeOffice to generate average values as seen in the table above.
+
+Multiple threads on a single CPU get really slow, as they starve each other. The scheduler determines how much time
+is wasted in the Peterson lock. In some lucky cases, a thread manages to do most of the incrementing itself and is
+not interrupted by other threads. As the scheduler does not switch threads often, and for Peterson to work the threads
+must be interleaved. This means often a thread wakes, spinwaits for a while, then goes back to sleep. This repeats until
+the topmost thread is awaked. I did not examine this scenario further, as it seems pointless to split a computationally
+intensive operation into multiple threads that run on the same core.
+
+Using volatile memory is slower than using non-volatile memory. The difference is consistent, but even this is contrived
+scenario where locking takes most of the time it only makes a small difference (around 1% runtime difference). However,
+the more threads there are the less difference volatile or non-volatile makes.
+
+The increments are distributed amongst threads reasonably well, but not exactly equally.
+
 
