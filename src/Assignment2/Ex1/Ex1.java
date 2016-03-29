@@ -38,7 +38,6 @@ public abstract class Ex1 {
             Ex1.singleProcessor = args[2].contains("s");
             Ex1.isVolatile = args[2].contains("v");
         }
-        Util.print("\nPETERSON LOCKED SHARED COUNTER TEST");
         runTest(numberOfThreads, counterLimit);
     }
 
@@ -48,18 +47,14 @@ public abstract class Ex1 {
         if (Ex1.singleProcessor) {
             try {
                 Util.setSolarisAffinity();
-                Util.print("single processor");
             } catch (Exception ex) {
             }
         } else {
-            Util.print("multiple processors");
         }
 
         if (Ex1.isVolatile) {
-            Util.print("volatile shared counter");
             ex1 = new Ex1Volatile(numberOfThreads, counterLimit);
         } else {
-            Util.print("non-volatile shared counter");
             ex1 = new Ex1NonVolatile(numberOfThreads, counterLimit);
         }
 
@@ -85,27 +80,48 @@ public abstract class Ex1 {
                 Arrays.stream(this.getSharedCounterAccess())
                 .boxed()
                 .collect(Collectors.toList());
+
+        if (Ex1.table) {
+            printTableOutput(duration, sharedCounterAccessList);
+        } else {
+            printRegularOutput(duration, sharedCounterAccessList);
+        }
+    }
+
+    private void printRegularOutput(long duration, List sharedCounterAccessList) {
+        Util.print("\nPETERSON LOCKED SHARED COUNTER TEST");
+        if (Ex1.singleProcessor) {
+            Util.print("single processor");
+        } else {
+            Util.print("multiple processors");
+        }
+        if (Ex1.isVolatile) {
+            Util.print("volatile shared counter");
+        } else {
+            Util.print("non-volatile shared counter");
+        }
         Util.print("number of threads: " + this.numberOfThreads);
         Util.print("duration in ms: " + Util.nanosToMillis(duration));
         Util.print("Final counter value: " + this.getSharedCounter());
         Util.print("Smallest access count: " + Collections.min(sharedCounterAccessList));
         Util.print("Biggest access count: " + Collections.max(sharedCounterAccessList));
-        if (Ex1.table) {
-            String table = "";
-            table += this.numberOfThreads;
-            table += ",";
-            table += this.getSharedCounter();
-            table += ",";
-            if (Ex1.isVolatile) table += "v";
-            if (Ex1.singleProcessor) table += "s";
-            table += ",";
-            table += Util.nanosToMillis(duration);
-            table += ",";
-            table += Collections.min(sharedCounterAccessList);
-            table += ",";
-            table += Collections.max(sharedCounterAccessList);
-            System.out.println(table);
-        }
+    }
+
+    private void printTableOutput(long duration, List sharedCounterAccessList) {
+        String table = "";
+        table += this.numberOfThreads;
+        table += ",";
+        table += this.getSharedCounter();
+        table += ",";
+        if (Ex1.isVolatile) table += "v";
+        if (Ex1.singleProcessor) table += "s";
+        table += ",";
+        table += Util.nanosToMillis(duration);
+        table += ",";
+        table += Collections.min(sharedCounterAccessList);
+        table += ",";
+        table += Collections.max(sharedCounterAccessList);
+        System.out.println(table);
     }
 
     protected abstract void lockedIncrement(int threadNumber);
