@@ -1,4 +1,4 @@
-package Assigment1.Ex1;
+package Assignment1.Ex1;
 
 public class Ex1NoSync extends Ex1 {
     protected void changeCounter(Integer value) {

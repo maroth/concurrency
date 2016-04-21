@@ -74,4 +74,8 @@ public class Util {
         }
     }
 
+    public static void pf(String message, Object value) {
+        System.out.println(String.format(message + ": %d", value));
+    }
+
 }

@@ -1,4 +1,4 @@
-package Assigment1.Ex1;
+package Assignment1.Ex1;
 
 import Util.Util;
 

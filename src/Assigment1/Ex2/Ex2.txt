@@ -1,3 +1,0 @@
-To run the benchmark, run main in the Assigment1.Ex2 class with the number of threads as the first parameter and the size of the
-buffer as the second parameter. There is no output.
-
