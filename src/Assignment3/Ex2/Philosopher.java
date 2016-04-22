@@ -33,34 +33,34 @@ public class Philosopher implements Runnable {
         }
     }
 
-    private void releaseFork(Fork fork) {
-        print(String.format("releasing fork %d", fork.getId()));
-        fork.release();
-        print(String.format("released fork %d", fork.getId()));
-    }
-
     private void grabFork(Fork fork) {
         print(String.format("grabbing fork %d", fork.getId()));
         fork.grab();
         print(String.format("grabbed fork %d", fork.getId()));
     }
 
+    private void releaseFork(Fork fork) {
+        print(String.format("releasing fork %d", fork.getId()));
+        fork.release();
+        print(String.format("released fork %d", fork.getId()));
+    }
+
     private void sleep() {
         print("Sleeping");
-//        try {
-//            Thread.sleep(random.nextInt(10));
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Thread.sleep(random.nextInt(10));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void eat() {
         print("Eating");
-//        try {
-//            Thread.sleep(random.nextInt(10));
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Thread.sleep(random.nextInt(1));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void print(String message) {

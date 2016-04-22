@@ -15,7 +15,6 @@ public class Table {
         philosophers = new Philosopher[numberOfPhilosophers];
         forks = new Fork[numberOfPhilosophers];
 
-
         for (int i = 0; i < numberOfPhilosophers; i++) {
             forks[i] = new Fork(i);
         }

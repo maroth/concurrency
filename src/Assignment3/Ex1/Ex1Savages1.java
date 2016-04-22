@@ -12,22 +12,25 @@ public class Ex1Savages1 {
     private static int numberOfSavages;
 
     public static void main(String[] args) {
-        numberOfSavages = 1000;
+        numberOfSavages = 100;
         maxNumberOfPortions = 3;
 
         Savage[] savages = new Savage[numberOfSavages];
         Pot pot = new Pot(maxNumberOfPortions);
         Cook cook = new Cook(pot);
         for (int i = 0; i < numberOfSavages; i++) {
-            savages[i] = new Savage(pot, cook, false);
+            savages[i] = new Savage(i, pot, cook);
         }
 
+        ExecutorService cookExecutor = Executors.newSingleThreadExecutor();
+        cookExecutor.execute(cook);
+
         ExecutorService executorService = Executors.newCachedThreadPool();
-        executorService.execute(cook);
         for (int i = 0; i < numberOfSavages; i++) {
             executorService.execute(savages[i]);
         }
 
         Util.waitForThreads(executorService);
+        cook.stop();
     }
 }

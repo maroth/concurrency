@@ -1,0 +1,28 @@
+Dining Savages
+==============
+
+The first version of the dining savages can be found in Ex1Savages1.java.
+
+Constraint I: The savage can't take from the pot if the pot is empty
+
+--> The "run" method in Savage.js is synchronized to the pot. This means that only one savage at the same time may check if the pot is full and then eat. This means that the savages will eat one after each other. This is necessary, because checking if the pot is empty and then eating must be atomic. If one savage checks and sees the pot is not empty, it must prevent all other savages from eating until it has eaten. This is accomplished by the "synchronized" block.
+
+Constraint II: The cook can't refill the pot unless the pot is empty
+
+--> Since the only call to the cook is done within the synchronized block, and code inside the synchronized block can only be executed by a single thread at a time, only one savage at a time may tell the cook to cook. The cook checks whether the bowl is empty before he fills it. Since there is only one cook, it is impossible for the contents of the bowl to change between checking if it is indeed empty and filling it, as the savage that is currently in the synchronized block is spin-waiting for the bowl to fill up again.
+
+This means the constraints are both fulfilled.
+
+
+Fair Dining Savages
+===================
+
+The second version of the dining savages can be found in Ex1Savages2.java.
+
+Constraint: No starvation
+
+--> The idea is that we define rounds, and each savage eats exactly once per round. The next round can only start once all savages have eaten in the round before, and so every savage has to wait until the next round to eat. This means that the savage that has eaten most at any given point has eaten at most once more than the savage that has eaten the least amount of times at that instant.
+
+To achieve this goal, I have created the FairKeeper class. Within the synchronized block in which a savage checks if the pot has food in it and eats it, after eating it tells the FairKeeper that it has eaten for this round. Then, after the synchronized block, it spin-waits for the round to be done. Only after the round is done does it try to get into the synchronized block again to try to start eating again.
+
+This procedure guarantees that the fairness constraint is always true and no savage starves.

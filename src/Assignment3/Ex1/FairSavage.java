@@ -6,35 +6,35 @@ public class FairSavage implements Runnable {
     private final Cook cook;
     private int round;
     private FairKeeper fairKeeper;
-    private final boolean forever;
 
-    public FairSavage(int id, Pot pot, Cook cook, FairKeeper fairKeeper, boolean forever) {
+    public FairSavage(int id, Pot pot, Cook cook, FairKeeper fairKeeper) {
         this.id = id;
         this.pot = pot;
         this.cook = cook;
         this.fairKeeper = fairKeeper;
-        this.forever = forever;
-        this.round = 0;
     }
 
     @Override
     public void run() {
-        do {
-            synchronized (this) {
-                while (pot.isEmpty()) {
+        while (true) {
+            synchronized (pot) {
+                if (pot.isEmpty()) {
                     print("pot is empty, notifying cook");
                     cook.cook();
-                    while (pot.isEmpty()) {}
+                    while (pot.isEmpty()) {
+                    }
                 }
                 print(String.format("eating for round %d", round));
                 pot.eat();
                 fairKeeper.eat();
-                while (fairKeeper.round == round) {
-                }
-                print(String.format("round %d finished ", round));
-                round += 1;
             }
-        } while (forever);
+
+            while (fairKeeper.round == round) {
+            }
+
+            print(String.format("round %d finished ", round));
+            round += 1;
+        }
     }
 
     private void print(String message) {

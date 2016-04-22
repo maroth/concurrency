@@ -3,7 +3,7 @@ package Assignment3.Ex1;
 public class Pot {
     private final int maxServings;
 
-    private int servings;
+    private volatile int servings;
 
     public Pot(int maxServings) {
         this.maxServings = maxServings;
@@ -18,9 +18,7 @@ public class Pot {
     }
 
     public void eat() {
+        servings -= 1;
         System.out.println(String.format("Pot contains %d", servings));
-        synchronized (this) {
-            servings -= 1;
-        }
     }
 }

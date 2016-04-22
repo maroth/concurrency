@@ -1,24 +1,31 @@
 package Assignment3.Ex1;
 
-public class Savage implements Runnable{
+public class Savage implements Runnable {
 
+    private int id;
     private final Pot pot;
     private final Cook cook;
-    private final boolean forever;
 
-    public Savage(Pot pot, Cook cook, boolean forever) {
+    public Savage(int id, Pot pot, Cook cook) {
+        this.id = id;
         this.pot = pot;
         this.cook = cook;
-        this.forever = forever;
     }
 
     @Override
     public void run() {
-        do {
+        synchronized(pot) {
             if (pot.isEmpty()) {
+                print("pot is empty, notifying cook");
                 cook.cook();
+                while (pot.isEmpty()) {}
             }
+            print(String.format("eating", null));
             pot.eat();
-        } while (forever);
+        }
+    }
+
+    private void print(String message) {
+        System.out.println(String.format("Savage %d: %s", id, message));
     }
 }

@@ -1,0 +1,10 @@
+Dining Philosophers
+===================
+
+I used ReentrantLocks to guarantee that each fork is only used by one philosopher at a time.
+
+I then gave each of the forks an id, and have each philosopher try to grab the fork with the lower id. For N=2 philosophers, this means that they both try to grab the same fork first. If both try to grab the same fork first, then whoever wins will try to grab the other one, and the one who lost will wait until the other philosopher has eaten.
+
+This case can be generalized to any N, as there will be at least two philosophers that will take forks from the opposite sides of each other.
+
+This solution is guaranteed to be correct, and in fact is the solution proposed by Dijkstra when he formulated the problem of the dining philosophers. Source: Wikipedia.

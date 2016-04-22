@@ -20,7 +20,7 @@ public class Ex1Savages2 {
         Cook cook = new Cook(pot);
         FairKeeper fairKeeper = new FairKeeper(numberOfSavages);
         for (int i = 0; i < numberOfSavages; i++) {
-            savages[i] = new FairSavage(i, pot, cook, fairKeeper, true);
+            savages[i] = new FairSavage(i, pot, cook, fairKeeper);
         }
 
         ExecutorService executorService = Executors.newCachedThreadPool();
