@@ -1,0 +1,29 @@
+Lock Performance
+================
+
+I ran each scenario 100 times and average the results using LibreOffice calc. The full result data is presented in
+results.html.
+
+4 Threads
+---------
+                    Counter    Duration (ms)        MinThreadCount      MaxThreadCount
+CASLock             3000000          1096.38             695181.33           817438.01
+CCASLock            3000000           466.92             669762.65           833687.67
+PetersonLock        3000000          3904.79             737768.65           761591.92
+
+8 Threads
+---------
+                    Counter    Duration (ms)        MinThreadCount      MaxThreadCount
+CASLock             3000000          1362.75             255083.45           544406.26
+CCASLock            3000000           832.52             222944.1            565987.95
+PetersonLock        3000000         16644.28             359137.82           359137.82
+
+
+
+As expected, CCASLock performs significantly better than CASLock. However both these locks are significantly
+faster than the Peterson-Lock.
+
+With 8 threads, the difference between the (C)CASLock and the PetersonLock gets even bigger, because the overhead
+of the Peterson lock gets bigger and bigger.
+
+

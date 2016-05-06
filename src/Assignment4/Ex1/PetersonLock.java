@@ -1,4 +1,4 @@
-package Assignment2.Ex1;
+package Assignment4.Ex1;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -38,7 +38,7 @@ public class PetersonLock {
                 debug("Thread " + threadNumber + " waiting");
             }
         }
-        debug(" Thread " + threadNumber + " got Lock");
+        debug(" Thread " + threadNumber + " got casLock");
     }
 
     private boolean threadIsVictimOnLevel(int threadNumber, int level) {
