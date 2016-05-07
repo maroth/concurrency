@@ -4,8 +4,8 @@ public class Node<T> {
 
     public T object;
     public Integer key;
-    public Node next;
-    public Node previous;
+    private Node next;
+    private Node previous;
 
     public void setObject(T object) {
         this.object = object;
@@ -20,8 +20,16 @@ public class Node<T> {
         this.next = next;
     }
 
+    public Node<T> getNext() {
+        return next;
+    }
+
     public void setPrevious(Node<T> previous) {
         this.previous = previous;
+    }
+
+    public Node<T> getPrevious() {
+        return previous;
     }
 
     public int compareTo(T value) {

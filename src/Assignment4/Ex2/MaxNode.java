@@ -8,6 +8,11 @@ public class MaxNode<T> extends SentinelNode<T> {
     }
 
     @Override
+    public Node<T> getNext() {
+        throw new Error("cant get next node of max node");
+    }
+
+    @Override
     public int compareTo(T value) {
         return 1;
     }

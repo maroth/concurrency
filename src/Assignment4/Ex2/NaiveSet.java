@@ -6,7 +6,7 @@ public class NaiveSet<T extends Comparable> extends BaseSet<T> {
     public boolean add(T toAdd) {
         Node<T> cursor = minNode;
         while (cursor.compareTo(toAdd) < 0) {
-            cursor = cursor.next;
+            cursor = cursor.getNext();
         }
 
         if (cursor.compareTo(toAdd) == 0) {
@@ -16,8 +16,10 @@ public class NaiveSet<T extends Comparable> extends BaseSet<T> {
         Node<T> newNode = new Node<>();
         newNode.setObject(toAdd);
         newNode.setNext(cursor);
-        newNode.setPrevious(cursor.previous);
-        cursor.previous.next = newNode;
+        newNode.setPrevious(cursor.getPrevious());
+        cursor.setPrevious(newNode);
+        cursor.getPrevious().setNext(newNode);
+        if (!validate()) throw new Error("invalid");
         return true;
     }
 
@@ -26,7 +28,7 @@ public class NaiveSet<T extends Comparable> extends BaseSet<T> {
         Node<T> cursor = minNode;
 
         while (cursor.compareTo(toRemove) < 0) {
-            cursor = cursor.next;
+            cursor = cursor.getNext();
         }
 
         if (cursor.compareTo(toRemove) != 0 || cursor == maxNode) {
@@ -34,9 +36,10 @@ public class NaiveSet<T extends Comparable> extends BaseSet<T> {
             return false;
         }
 
-        cursor.previous.next = cursor.next;
-        cursor.next.previous = cursor.previous;
+        cursor.getPrevious().setNext(cursor.getNext());
+        cursor.getNext().setPrevious(cursor.getPrevious());
 
+        if (!validate()) throw new Error("invalid");
         return true;
     }
 
@@ -45,7 +48,7 @@ public class NaiveSet<T extends Comparable> extends BaseSet<T> {
         Node<T> cursor = minNode;
 
         while (cursor.compareTo(toCheck) < 0) {
-            cursor = cursor.next;
+            cursor = cursor.getNext();
         }
 
         if (cursor.compareTo(toCheck) != 0 || cursor == maxNode) {

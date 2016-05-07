@@ -9,21 +9,21 @@ public abstract class BaseSet<T> implements Set<T> {
     public BaseSet() {
         maxNode = new MaxNode<>();
         minNode = new MinNode<>();
-        minNode.next = maxNode;
-        maxNode.previous = minNode;
+        minNode.setNext(maxNode);
+        maxNode.setPrevious(minNode);
         validate();
     }
 
     public boolean validate() {
-        Node<T> cursor = minNode.next;
+        Node<T> cursor = minNode.getNext();
         if (cursor == maxNode) {
             //empty set
             return true;
         }
         T currentValue;
         HashSet<T> hashSet = new HashSet<>();
-        while (cursor.next != maxNode) {
-            if (cursor.next.previous != cursor) {
+        while (cursor.getNext() != maxNode) {
+            if (cursor.getNext().getPrevious() != cursor) {
                 // list not consistent
                 return false;
             }
@@ -33,7 +33,7 @@ public abstract class BaseSet<T> implements Set<T> {
                 // list contains duplicate elements
                 return false;
             }
-            cursor = cursor.next;
+            cursor = cursor.getNext();
             if (cursor.compareTo(currentValue) < 0) {
                 // list is not ordered
                 return false;
