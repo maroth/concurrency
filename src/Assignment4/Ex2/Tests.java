@@ -2,7 +2,7 @@ package Assignment4.Ex2;
 
 public class Tests {
     public static void main(String[] args) throws Exception {
-        BaseSet<Integer> testee = new FineGrainedSet<>();
+        BaseSet<Integer> testee = new OptimisticFineGrainedSet<>();
 
         testee.add(1);
         System.out.println(testee.toString());

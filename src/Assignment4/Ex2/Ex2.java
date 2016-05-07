@@ -8,9 +8,29 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Ex2 {
     public static void main(String[] args) {
         // int numberOfThreads = Util.Util.parseParam(args, 1);
-        int numberOfThreads = 2;
+
         int totalNumbers = 100000;
-        BaseSet set = new FineGrainedSet<Integer>();
+        System.out.println("Total random numbers: " + totalNumbers);
+
+        runTestSet(2, totalNumbers);
+        runTestSet(4, totalNumbers);
+        runTestSet(8, totalNumbers);
+    }
+
+    private static void runTestSet(int numberOfThreads, int totalNumbers) {
+        System.out.println("\nTHREADS: " + numberOfThreads);
+
+        long coarse = runTest(numberOfThreads, totalNumbers, new CoarseSet<Integer>());
+        System.out.println("Coarse locked set: " + coarse);
+
+        long fine = runTest(numberOfThreads, totalNumbers, new FineGrainedSet<>());
+        System.out.println("Fine grain locked set: " + fine);
+
+        long optimistic = runTest(numberOfThreads, totalNumbers, new OptimisticFineGrainedSet<>());
+        System.out.println("Optimistic fine grain locked set: " + optimistic);
+    }
+
+    private static long runTest(int numberOfThreads, int totalNumbers, BaseSet set) {
         ExecutorService executorService = Executors.newCachedThreadPool();
 
         int[] numbers = new int[totalNumbers];
@@ -37,8 +57,7 @@ public class Ex2 {
             Util.Util.waitForThreads(executorService);
         });
 
-        System.out.println(set.toString());
-        System.out.println("Duration (ms): " + Util.Util.nanosToMillis(duration));
+        return Util.Util.nanosToMillis(duration);
     }
 
     public static class Adder implements Runnable {

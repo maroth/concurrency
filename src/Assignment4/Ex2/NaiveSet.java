@@ -4,7 +4,7 @@ public class NaiveSet<T> extends BaseSet<T> {
 
     @Override
     public boolean add(T toAdd) {
-        if (!validate()) throw new Error("invalid");
+//        if (!validate()) throw new Error("invalid");
 
         Node<T> prev = null;
         Node<T> cursor = minNode;
@@ -23,13 +23,13 @@ public class NaiveSet<T> extends BaseSet<T> {
         newNode.setNext(cursor);
         prev.setNext(newNode);
 
-        if (!validate()) throw new Error("invalid");
+//        if (!validate()) throw new Error("invalid");
         return true;
     }
 
     @Override
     public boolean remove(T toRemove) {
-        if (!validate()) throw new Error("invalid");
+//        if (!validate()) throw new Error("invalid");
 
         Node<T> prev = null;
         Node<T> cursor = minNode;
@@ -46,13 +46,13 @@ public class NaiveSet<T> extends BaseSet<T> {
 
         prev.setNext(cursor.getNext());
 
-        if (!validate()) throw new Error("invalid");
+//        if (!validate()) throw new Error("invalid");
         return true;
     }
 
     @Override
     public boolean contains(T toCheck) {
-        if (!validate()) throw new Error("invalid");
+//        if (!validate()) throw new Error("invalid");
 
         Node<T> cursor = minNode;
         while (cursor.isSmallerThan(toCheck)) {

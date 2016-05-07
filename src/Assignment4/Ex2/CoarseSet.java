@@ -1,6 +1,6 @@
 package Assignment4.Ex2;
 
-public class CourseSet<T> extends BaseSet<T> {
+public class CoarseSet<T> extends BaseSet<T> {
 
     NaiveSet<T> naiveSet = new NaiveSet<>();
 

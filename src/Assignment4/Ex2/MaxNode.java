@@ -21,4 +21,9 @@ public class MaxNode<T> extends SentinelNode<T> {
     public boolean isEqualTo(T value) {
         return value instanceof MaxNode;
     }
+
+    @Override
+    public Integer getKey() {
+        return Integer.MAX_VALUE;
+    }
 }

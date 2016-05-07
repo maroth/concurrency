@@ -1,0 +1,27 @@
+Output on the sunfire machine:
+
+/home/m.roth13$ java -jar concurrency.jar
+Total random numbers: 100000
+
+THREADS: 2
+Coarse locked set: 350
+Fine grain locked set: 492
+Optimistic fine grain locked set: 2909
+
+THREADS: 4
+Coarse locked set: 296
+Fine grain locked set: 1573
+Optimistic fine grain locked set: 1384
+
+THREADS: 8
+Coarse locked set: 279
+Fine grain locked set: 1766
+Optimistic fine grain locked set: 785
+
+
+As we get more and more threads, the optimistic lock gets better in comparison to the hand-over-hand locking.
+
+This is because with more threads, it is more and more of a problem that the threads can't overtake each other.
+
+Interestingly, the course locked set is still much more efficient in this particular scenario. This is because
+it needs far fewer locks in the first place, and traversing the list ist very quick.

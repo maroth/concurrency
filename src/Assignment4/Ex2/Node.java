@@ -5,7 +5,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Node<T> {
 
     public T object;
-    public Integer key;
+    private Integer key;
     private Node next;
     private ReentrantLock lock = new ReentrantLock();
 
@@ -31,16 +31,22 @@ public class Node<T> {
     }
 
     public boolean isSmallerThan(T value) {
-        return this.key.compareTo(value.hashCode()) < 0;
+        return this.getKey().compareTo(value.hashCode()) < 0;
+    }
+
+    public boolean isSmallerOrEqual(Node<T> node) {
+        return this.getKey().compareTo(node.getKey()) <= 0;
+    }
+
+    public Integer getKey() {
+        return this.key;
     }
 
     public void lock() {
-//        System.out.println("Locking " + object);
         this.lock.lock();
     }
 
     public void unlock() {
-//        System.out.println("Unlocking " + object);
         this.lock.unlock();
     }
 }

@@ -11,4 +11,14 @@ public class MinNode<T> extends SentinelNode<T> {
     public boolean isEqualTo(T value) {
         return value instanceof MinNode;
     }
+
+    @Override
+    public boolean isSmallerOrEqual(Node<T> node) {
+        return true;
+    }
+
+    @Override
+    public Integer getKey() {
+        return Integer.MIN_VALUE;
+    }
 }
