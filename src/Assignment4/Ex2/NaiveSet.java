@@ -15,7 +15,9 @@ public class NaiveSet<T extends Comparable> extends BaseSet<T> {
             return false;
         }
 
-        Node<T> newNode = new Node<T>(toAdd, cursor);
+        Node<T> newNode = new Node<>();
+        newNode.setObject(toAdd);
+        newNode.setNext(cursor);
         last.next = newNode;
         return true;
     }

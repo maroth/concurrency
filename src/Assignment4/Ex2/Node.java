@@ -1,30 +1,25 @@
 package Assignment4.Ex2;
 
-public class Node<T extends Comparable> {
+public class Node<T> {
 
     public T object;
-    public int key;
+    public Integer key;
     public Node next;
-    public boolean isMaxNode = false;
-    public boolean isMinNode = false;
 
-    public Node(T value, Node next) {
-        this.object = value;
-        if (value != null) {
-            this.key = value.hashCode();
-        }
+    public void setObject(T object) {
+        this.object = object;
+        key = object.hashCode();
+    }
+
+    public T getObject() {
+        return object;
+    }
+
+    public void setNext(Node<T> next) {
         this.next = next;
     }
 
     public int compareTo(T value) {
-        if (isMaxNode) return 1;
-        if (isMinNode) return -1;
-        return this.object.compareTo(value);
-    }
-
-    public int compareTo(Node<T> other) {
-        if (isMaxNode || other.isMinNode) return 1;
-        if (isMinNode || other.isMaxNode) return -1;
-        return this.object.compareTo(other.object);
+        return this.key.compareTo(value.hashCode());
     }
 }

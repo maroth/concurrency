@@ -1,19 +1,19 @@
 package Assignment4.Ex2;
 
-public class FineGrainedSet extends BaseSet {
+public class FineGrainedSet<T> extends BaseSet<T> {
 
     @Override
-    public boolean add(Comparable x) {
+    public boolean add(T x) {
         return false;
     }
 
     @Override
-    public boolean remove(Comparable x) {
+    public boolean remove(T x) {
         return false;
     }
 
     @Override
-    public boolean contains(Comparable x) {
+    public boolean contains(T x) {
         return false;
     }
 }

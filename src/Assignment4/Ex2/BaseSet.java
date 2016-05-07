@@ -2,39 +2,39 @@ package Assignment4.Ex2;
 
 import java.util.HashSet;
 
-public abstract class BaseSet<T extends Comparable> implements Set<T> {
+public abstract class BaseSet<T> implements Set<T> {
     public Node<T> minNode;
     public Node<T> maxNode;
 
     public BaseSet() {
-        maxNode = new Node<T>(null, null);
-        maxNode.isMaxNode = true;
-        minNode = new Node<T>(null, maxNode);
-        minNode.isMinNode = true;
+        maxNode = new MaxNode<>();
+        minNode = new MinNode<>();
+        minNode.next = maxNode;
         validate();
     }
 
     public boolean validate() {
-        Node cursor = minNode.next;
+        Node<T> cursor = minNode.next;
         if (cursor == maxNode) {
             //empty set
             return true;
         }
-        Comparable currentValue;
-        HashSet<Comparable> hashSet = new HashSet<>();
+        T currentValue;
+        HashSet<T> hashSet = new HashSet<>();
         while (cursor.next != maxNode) {
-            currentValue = cursor.object;
+            currentValue = cursor.getObject();
             boolean added = hashSet.add(currentValue);
             if (!added) {
                 // list contains duplicate elements
                 return false;
             }
             cursor = cursor.next;
-            if (cursor.object.compareTo(currentValue) < 0) {
+            if (cursor.compareTo(currentValue) < 0) {
                 // list is not ordered
                 return false;
             }
         }
+
         return true;
     }
 }
