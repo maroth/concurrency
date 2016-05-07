@@ -1,11 +1,14 @@
 package Assignment4.Ex2;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 public class Node<T> {
 
     public T object;
     public Integer key;
     private Node next;
     private Node previous;
+    private ReentrantLock lock = new ReentrantLock();
 
     public void setObject(T object) {
         this.object = object;
@@ -34,5 +37,15 @@ public class Node<T> {
 
     public int compareTo(T value) {
         return this.key.compareTo(value.hashCode());
+    }
+
+    public void lock() {
+//        System.out.println("Locking " + object);
+        this.lock.lock();
+    }
+
+    public void unlock() {
+//        System.out.println("Unlocking " + object);
+        this.lock.unlock();
     }
 }
