@@ -6,6 +6,4 @@ public interface Set<T> {
     boolean remove(T x);
 
     boolean contains(T x);
-
-    boolean validate();
 }

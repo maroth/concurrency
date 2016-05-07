@@ -14,29 +14,45 @@ public abstract class BaseSet<T> implements Set<T> {
         validate();
     }
 
+    @Override
+    public String toString() {
+        String result = "";
+        Node<T> cursor = minNode;
+        while (cursor.getNext() != maxNode) {
+            cursor = cursor.getNext();
+            result += cursor.object.toString();
+            result += " ";
+        }
+        return result;
+    }
+
     public boolean validate() {
         Node<T> cursor = minNode.getNext();
         if (cursor == maxNode) {
-            //empty set
-            return true;
+            if (cursor.getPrevious() == minNode) {
+                //empty set
+                return true;
+            } else {
+                //not consistent
+                throw new Error ("initial two nodes not consistent");
+            }
         }
         T currentValue;
         HashSet<T> hashSet = new HashSet<>();
         while (cursor.getNext() != maxNode) {
             if (cursor.getNext().getPrevious() != cursor) {
-                // list not consistent
-                return false;
+                throw new Error ("prev/next not consistent");
             }
             currentValue = cursor.getObject();
             boolean added = hashSet.add(currentValue);
             if (!added) {
                 // list contains duplicate elements
-                return false;
+                throw new Error ("list contains duplicate items");
             }
             cursor = cursor.getNext();
             if (cursor.compareTo(currentValue) < 0) {
                 // list is not ordered
-                return false;
+                throw new Error ("list not in order");
             }
         }
 

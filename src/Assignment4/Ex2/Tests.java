@@ -2,9 +2,11 @@ package Assignment4.Ex2;
 
 public class Tests {
     public static void main(String[] args) throws Exception {
-        Set<Integer> testee = new NaiveSet<>();
+        BaseSet<Integer> testee = new NaiveSet<>();
 
         testee.add(1);
+        System.out.println(testee.toString());
+
         boolean contains = testee.contains(1);
         if (!contains) throw new Exception("does not contain contained item");
 
@@ -15,9 +17,11 @@ public class Tests {
         if (contains) throw new Exception("contains item that is not contained");
 
         boolean removed = testee.remove(1);
+        System.out.println(testee.toString());
         if (!removed) throw new Exception("did not remove existing item");
 
         removed = testee.remove(1);
+        System.out.println(testee.toString());
         if (removed) throw new Exception("removed non-existing item");
 
         testee.add(1);

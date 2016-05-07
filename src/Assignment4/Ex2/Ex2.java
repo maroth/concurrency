@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Ex2 {
     public static void main(String[] args) {
         // int numberOfThreads = Util.Util.parseParam(args, 1);
-        int numberOfThreads = 2;
+        int numberOfThreads = 1;
         int totalNumbers = 100000;
         BaseSet set = new NaiveSet<Integer>();
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -39,9 +39,9 @@ public class Ex2 {
 
     public static class Adder implements Runnable {
         private int[] segment;
-        private Set set;
+        private BaseSet set;
 
-        public Adder(int[] segment, Set set) {
+        public Adder(int[] segment, BaseSet set) {
             this.segment = segment;
             this.set = set;
         }
@@ -49,17 +49,23 @@ public class Ex2 {
         @Override
         public void run() {
             for (int j = 0; j < segment.length; j++) {
-                set.add(segment[j]);
-                System.out.println("added " + j);
+                try {
+                    boolean added = set.add(segment[j]);
+//                    System.out.println("added " + j + " (" + added + ")");
+                } catch (Error e) {
+                    System.out.println(e);
+                    System.out.println(set.toString());
+                    System.exit(1);
+                }
             }
         }
     }
 
     public static class Remover implements Runnable {
         private int[] segment;
-        private Set set;
+        private BaseSet set;
 
-        public Remover(int[] segment, Set set) {
+        public Remover(int[] segment, BaseSet set) {
             this.segment = segment;
             this.set = set;
         }
@@ -67,8 +73,14 @@ public class Ex2 {
         @Override
         public void run() {
             for (int j = 0; j < segment.length; j++) {
-                set.remove(segment[j]);
-                System.out.println("removed " + j);
+                try {
+                    boolean removed = set.remove(segment[j]);
+//                    System.out.println("removed " + j + " (" + removed + ")");
+                } catch (Error e) {
+                    System.out.println(e);
+                    System.out.println(set.toString());
+                    System.exit(1);
+                }
             }
         }
     }
