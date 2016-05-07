@@ -4,7 +4,7 @@ public class OptimisticFineGrainedSet<T> extends BaseSet<T> {
 
     @Override
     public boolean add(T toAdd) {
-        if (!validate()) throw new Error("invalid");
+//        if (!validate()) throw new Error("invalid");
 
         Node<T> prev;
         Node<T> cursor;
