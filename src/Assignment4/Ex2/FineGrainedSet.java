@@ -5,34 +5,34 @@ public class FineGrainedSet<T> extends BaseSet<T> {
     @Override
     public boolean add(T toAdd) {
         if (!validate()) throw new Error("invalid");
-        Node<T> cursor = minNode;
-        minNode.lock();
 
-        while (cursor.compareTo(toAdd) < 0) {
-            if (cursor != minNode){
-                cursor.getPrevious().unlock();
-            }
+        Node<T> prev = minNode;
+        Node<T> cursor = minNode.getNext();
+
+        prev.lock();
+        cursor.lock();
+
+        while (cursor.isSmallerThan(toAdd)) {
+            prev.unlock();
+            prev = cursor;
             cursor = cursor.getNext();
             cursor.lock();
         }
 
-        if (cursor.compareTo(toAdd) == 0) {
+        if (cursor.isEqualTo(toAdd)) {
             //element already in set
+            prev.unlock();
             cursor.unlock();
-            cursor.getPrevious().unlock();
             return false;
         }
 
         Node<T> newNode = new Node<>();
         newNode.setObject(toAdd);
+
         newNode.setNext(cursor);
-        newNode.setPrevious(cursor.getPrevious());
+        prev.setNext(newNode);
 
-        Node<T> previous = cursor.getPrevious();
-        cursor.setPrevious(newNode);
-        previous.setNext(newNode);
-
-        previous.unlock();
+        prev.unlock();
         cursor.unlock();
 
         if (!validate()) throw new Error("invalid");
@@ -42,39 +42,48 @@ public class FineGrainedSet<T> extends BaseSet<T> {
     @Override
     public boolean remove(T toRemove) {
         if (!validate()) throw new Error("invalid");
-        Node<T> cursor = minNode;
-        minNode.lock();
+        Node<T> prev = minNode;
+        Node<T> cursor = minNode.getNext();
 
-        while (cursor.compareTo(toRemove) < 0) {
-            if (cursor != minNode) {
-                cursor.getPrevious().unlock();
-            }
+        prev.lock();
+        cursor.lock();
+
+        while (cursor.isSmallerThan(toRemove)) {
+            prev.unlock();
+            prev = cursor;
             cursor = cursor.getNext();
             cursor.lock();
         }
 
-        if (cursor.compareTo(toRemove) != 0) {
+        if (!cursor.isEqualTo(toRemove)) {
             // set does not contain element
             cursor.unlock();
-            cursor.getPrevious().unlock();
+            prev.unlock();
             return false;
         }
 
-        Node<T> previous = cursor.getPrevious();
-        Node<T> next = cursor.getNext();
+        prev.setNext(cursor.getNext());
 
-        previous.setNext(next);
-        next.setPrevious(previous);
+        prev.unlock();
+        cursor.unlock();
 
         if (!validate()) throw new Error("invalid");
-
-        cursor.unlock();
-        cursor.getPrevious().unlock();
         return true;
     }
 
     @Override
     public boolean contains(T toCheck) {
+        if (!validate()) throw new Error("invalid");
+
+        Node<T> cursor = minNode;
+        while (cursor.isSmallerThan(toCheck)) {
+            cursor = cursor.getNext();
+        }
+
+        if (cursor.isEqualTo(toCheck)) {
+            return true;
+        }
+
         return false;
     }
 }

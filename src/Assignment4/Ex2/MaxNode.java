@@ -13,7 +13,12 @@ public class MaxNode<T> extends SentinelNode<T> {
     }
 
     @Override
-    public int compareTo(T value) {
-        return 1;
+    public boolean isSmallerThan(T value) {
+        return false;
+    }
+
+    @Override
+    public boolean isEqualTo(T value) {
+        return value instanceof MaxNode;
     }
 }

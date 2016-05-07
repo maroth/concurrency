@@ -10,7 +10,7 @@ public class Ex2 {
         // int numberOfThreads = Util.Util.parseParam(args, 1);
         int numberOfThreads = 2;
         int totalNumbers = 100000;
-        BaseSet set = new FineGrainedSet<>();
+        BaseSet set = new FineGrainedSet<Integer>();
         ExecutorService executorService = Executors.newCachedThreadPool();
 
         int[] numbers = new int[totalNumbers];
@@ -55,7 +55,7 @@ public class Ex2 {
             for (int j = 0; j < segment.length; j++) {
                 try {
                     boolean added = set.add(segment[j]);
-                    System.out.println("added " + j + " (" + added + ")");
+//                    System.out.println("added " + j + " (" + added + ")");
                 } catch (Error e) {
                     System.out.println(e);
                     System.out.println(set.toString());
@@ -79,7 +79,7 @@ public class Ex2 {
             for (int j = 0; j < segment.length; j++) {
                 try {
                     boolean removed = set.remove(segment[j]);
-                    System.out.println("removed " + j + " (" + removed + ")");
+//                    System.out.println("removed " + j + " (" + removed + ")");
                 } catch (Error e) {
                     System.out.println(e);
                     System.out.println(set.toString());

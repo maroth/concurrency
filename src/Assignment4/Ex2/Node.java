@@ -7,7 +7,6 @@ public class Node<T> {
     public T object;
     public Integer key;
     private Node next;
-    private Node previous;
     private ReentrantLock lock = new ReentrantLock();
 
     public void setObject(T object) {
@@ -27,16 +26,12 @@ public class Node<T> {
         return next;
     }
 
-    public void setPrevious(Node<T> previous) {
-        this.previous = previous;
+    public boolean isEqualTo(T value) {
+        return this.object.equals(value);
     }
 
-    public Node<T> getPrevious() {
-        return previous;
-    }
-
-    public int compareTo(T value) {
-        return this.key.compareTo(value.hashCode());
+    public boolean isSmallerThan(T value) {
+        return this.key.compareTo(value.hashCode()) < 0;
     }
 
     public void lock() {

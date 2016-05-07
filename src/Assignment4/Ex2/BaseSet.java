@@ -10,7 +10,6 @@ public abstract class BaseSet<T> implements Set<T> {
         maxNode = new MaxNode<>();
         minNode = new MinNode<>();
         minNode.setNext(maxNode);
-        maxNode.setPrevious(minNode);
         validate();
     }
 
@@ -29,20 +28,11 @@ public abstract class BaseSet<T> implements Set<T> {
     public boolean validate() {
         Node<T> cursor = minNode.getNext();
         if (cursor == maxNode) {
-            if (cursor.getPrevious() == minNode) {
-                //empty set
-                return true;
-            } else {
-                //not consistent
-                throw new Error ("initial two nodes not consistent");
-            }
+            return true;
         }
         T currentValue;
         HashSet<T> hashSet = new HashSet<>();
-        while (cursor.getNext() != maxNode) {
-            if (cursor.getNext().getPrevious() != cursor) {
-                throw new Error ("prev/next not consistent");
-            }
+        while (cursor != maxNode) {
             currentValue = cursor.getObject();
             boolean added = hashSet.add(currentValue);
             if (!added) {
@@ -50,7 +40,7 @@ public abstract class BaseSet<T> implements Set<T> {
                 throw new Error ("list contains duplicate items");
             }
             cursor = cursor.getNext();
-            if (cursor.compareTo(currentValue) < 0) {
+            if (cursor.isSmallerThan(currentValue)) {
                 // list is not ordered
                 throw new Error ("list not in order");
             }
