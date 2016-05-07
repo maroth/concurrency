@@ -10,6 +10,7 @@ public abstract class BaseSet<T> implements Set<T> {
         maxNode = new MaxNode<>();
         minNode = new MinNode<>();
         minNode.next = maxNode;
+        maxNode.previous = minNode;
         validate();
     }
 
@@ -22,6 +23,10 @@ public abstract class BaseSet<T> implements Set<T> {
         T currentValue;
         HashSet<T> hashSet = new HashSet<>();
         while (cursor.next != maxNode) {
+            if (cursor.next.previous != cursor) {
+                // list not consistent
+                return false;
+            }
             currentValue = cursor.getObject();
             boolean added = hashSet.add(currentValue);
             if (!added) {
