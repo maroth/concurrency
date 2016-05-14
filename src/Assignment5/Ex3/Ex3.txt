@@ -1,0 +1,15 @@
+Concurrency - Foundations and Algorithms
+Assignment 5 Exercise 3
+
+I implemented the queues and the barrier and ran the test 1000 times on the Sunfire machine. The averaged results are:
+
+                2 THREADS   4 THREADS    8 THREADS
+lock based:        20.443       26.29       27.599
+lock free:         26.03        14.408      12.866
+
+
+We can see that the lock based queue is faster with only two threads, but gets slower when more threads are added.
+The lock free queue starts slower than the lock based queue, but gets faster as more threads are added.
+
+
+

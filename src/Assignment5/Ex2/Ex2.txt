@@ -1,0 +1,37 @@
+Concurrency - Foundations and Algorithms
+Assignment 5 Exercise 2
+
+We want to find out if the following scenario is possible:
+
+-Thread A starts enqueuing item 1
+-Thread B starts enqueuing item 2
+-Thread C starts de-queuing and de-queues item 2
+
+This would oppose FIFO order, as thread C should de-queue item 1 because it was added first.
+
+We can try to construct this scenario:
+
+tail = 0; items = []
+-Thread A atomically increments tail, gets 0 for i
+tail = 1; items = []
+-Thread B atomically increments tail, gets 1 for i
+tail = 2; items = []
+-Thread B sets items[1] to "second item"
+tail = 2; items[1] = "second item"
+-Thread C gets 2 for range
+-Thread C starts for-loop with with 0, getAndSet returns null
+-Thread C starts for-loop with 1, getAndSet returns "second item"
+tail = 2; items = []
+-Thread A sets items[0] to "first item"
+tail = 2; items[0] = "first item"
+
+We see here that while Thread A was called to enqueue "first item" before thread B was called to enqueue "second item",
+thread C de-queued "second item" first.
+
+This is because the tail value is not increased in an atomic operation with adding to the items array.
+
+The presented queue does not preserve the FIFO order in all cases.
+
+
+
+

@@ -1,0 +1,21 @@
+Concurrency - Foundations and Algorithms
+Assignment 5 Exercise 1
+
+We are analyzing the dequeue method in an unbounded queue using a lock. The question is whether it is necessary
+to lock queue while checking if it is empty.
+
+Assuming that we don't lock the queue during the empty checking, can we construct a scenario where something is wrong?
+
+-The queue contains one item
+-Thread A wants to dequeue and finds the queue is not empty
+-Thread B wants to dequeue and finds the queue is not empty
+-Thread A locks the queue, de-queues an object, and unlocks the queue
+-Thread B locks the queue, tries to access head.next, but fails because the queue is now empty
+
+It is therefore certainly necessary to check whether the queue is empty within the locked section of code, because
+it might have been emptied by another thread after checking before the lock was acquired.
+
+In some cases, it might be beneficial to do both: If the queue is empty, we don't need to wait for a lock to throw the
+"queue is empty" exception. This might lead to higher performance. However, in this scenario we must check for an
+empty queue again once the lock was acquired.
+
